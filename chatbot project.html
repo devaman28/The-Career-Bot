@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to Medha</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #0a0e27;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .space-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 3s infinite;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+        }
+
+        .planet {
+            position: absolute;
+            border-radius: 50%;
+            animation: float 20s infinite ease-in-out;
+        }
+
+        .planet1 {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #ff6b6b, #ee5a6f);
+            top: 15%;
+            left: 10%;
+            box-shadow: 0 0 40px rgba(255, 107, 107, 0.4);
+        }
+
+        .planet2 {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #4ecdc4, #44a08d);
+            top: 60%;
+            right: 15%;
+            box-shadow: 0 0 30px rgba(78, 205, 196, 0.4);
+            animation-delay: -5s;
+        }
+
+        .planet3 {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #ffd93d, #f6c744);
+            bottom: 20%;
+            left: 20%;
+            box-shadow: 0 0 25px rgba(255, 217, 61, 0.4);
+            animation-delay: -10s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-30px) rotate(180deg); }
+        }
+
+        .spaceship {
+            position: fixed;
+            width: 80px;
+            height: 80px;
+            left: -100px;
+            top: 20%;
+            z-index: 1;
+            animation: flyAcross 8s ease-in-out;
+            filter: drop-shadow(0 0 10px rgba(102, 126, 234, 0.8));
+        }
+
+        @keyframes flyAcross {
+            0% {
+                left: -100px;
+                top: 20%;
+                transform: rotate(-20deg);
+            }
+            25% {
+                top: 40%;
+            }
+            50% {
+                top: 30%;
+            }
+            75% {
+                top: 50%;
+            }
+            100% {
+                left: 110%;
+                top: 35%;
+                transform: rotate(20deg);
+            }
+        }
+
+        .shooting-star {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: white;
+            border-radius: 50%;
+            box-shadow: 0 0 10px 2px white;
+            animation: shoot 3s linear infinite;
+        }
+
+        @keyframes shoot {
+            0% {
+                transform: translate(0, 0);
+                opacity: 1;
+            }
+            100% {
+                transform: translate(-300px, 300px);
+                opacity: 0;
+            }
+        }
+
+        .chat-container {
+            width: 100%;
+            max-width: 500px;
+            height: 600px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            position: relative;
+            z-index: 2;
+            border: 2px solid rgba(102, 126, 234, 0.3);
+        }
+
+        .chat-header {
+            background: linear-gradient(135deg, #212122 0%, #171717 100%);
+            color: rgb(250, 245, 245);
+            padding: 20px;
+            text-align: center;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .chat-messages {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            background: #f5f5f5;
+        }
+
+        .message {
+            margin-bottom: 15px;
+            animation: fadeIn 0.3s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .bot-message {
+            display: flex;
+            justify-content: flex-start;
+        }
+
+        .user-message {
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .message-content {
+            max-width: 75%;
+            padding: 12px 16px;
+            border-radius: 18px;
+            word-wrap: break-word;
+        }
+
+        .bot-message .message-content {
+            background: white;
+            color: #333;
+            border-bottom-left-radius: 4px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .user-message .message-content {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-bottom-right-radius: 4px;
+        }
+
+        .options-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .option-btn {
+            background: white;
+            border: 2px solid #667eea;
+            color: #667eea;
+            padding: 10px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .option-btn:hover {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(102, 126, 234, 0.3);
+        }
+
+        .chat-input-area {
+            padding: 15px;
+            background: white;
+            border-top: 1px solid #e0e0e0;
+            display: flex;
+            gap: 10px;
+        }
+
+        .chat-input {
+            flex: 1;
+            padding: 12px 16px;
+            border: 2px solid #e0e0e0;
+            border-radius: 25px;
+            font-size: 14px;
+            outline: none;
+            transition: border-color 0.3s ease;
+        }
+
+        .chat-input:focus {
+            border-color: #667eea;
+        }
+
+        .send-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: transform 0.2s ease;
+        }
+
+        .send-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .send-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .typing-indicator {
+            display: flex;
+            gap: 4px;
+            padding: 12px 16px;
+            background: white;
+            border-radius: 18px;
+            width: fit-content;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .typing-dot {
+            width: 8px;
+            height: 8px;
+            background: #667eea;
+            border-radius: 50%;
+            animation: typing 1.4s infinite;
+        }
+
+        .typing-dot:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .typing-dot:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes typing {
+            0%, 60%, 100% {
+                transform: translateY(0);
+            }
+            30% {
+                transform: translateY(-10px);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Space Background -->
+    <div class="space-background" id="spaceBackground"></div>
+
+    <!-- Spaceship -->
+    <svg class="spaceship" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+            <linearGradient id="shipGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" style="stop-color:#667eea;stop-opacity:1" />
+                <stop offset="100%" style="stop-color:#764ba2;stop-opacity:1" />
+            </linearGradient>
+        </defs>
+        <!-- Spaceship body -->
+        <ellipse cx="50" cy="50" rx="35" ry="15" fill="url(#shipGradient)"/>
+        <ellipse cx="50" cy="45" rx="25" ry="18" fill="#8a94f7"/>
+        <circle cx="50" cy="40" r="10" fill="#4ecdc4" opacity="0.6"/>
+        <!-- Windows -->
+        <circle cx="45" cy="38" r="3" fill="#ffd93d"/>
+        <circle cx="55" cy="38" r="3" fill="#ffd93d"/>
+        <!-- Flame -->
+        <path d="M 20 55 Q 15 65 20 70 L 30 55 Z" fill="#ff6b6b" opacity="0.8">
+            <animate attributeName="d" 
+                values="M 20 55 Q 15 65 20 70 L 30 55 Z;
+                        M 20 55 Q 15 70 20 75 L 30 55 Z;
+                        M 20 55 Q 15 65 20 70 L 30 55 Z"
+                dur="0.3s" repeatCount="indefinite"/>
+        </path>
+        <path d="M 70 55 Q 85 65 80 70 L 70 55 Z" fill="#ff6b6b" opacity="0.8">
+            <animate attributeName="d" 
+                values="M 70 55 Q 85 65 80 70 L 70 55 Z;
+                        M 70 55 Q 85 70 80 75 L 70 55 Z;
+                        M 70 55 Q 85 65 80 70 L 70 55 Z"
+                dur="0.3s" repeatCount="indefinite"/>
+        </path>
+    </svg>
+
+    <!-- Planets -->
+    <div class="planet planet1"></div>
+    <div class="planet planet2"></div>
+    <div class="planet planet3"></div>
+
+    <!-- Chat Container -->
+    <div class="chat-container">
+        <div class="chat-header">
+            🚀 The Career Bot
+        </div>
+        <div class="chat-messages" id="chatMessages"></div>
+        <div class="chat-input-area">
+            <input 
+                type="text" 
+                class="chat-input" 
+                id="userInput" 
+                placeholder="Type your message..."
+                disabled
+            >
+            <button class="send-btn" id="sendBtn" disabled>Send</button>
+        </div>
+    </div>
+
+    <script>
+        // Create stars
+        const spaceBackground = document.getElementById('spaceBackground');
+        for (let i = 0; i < 150; i++) {
+            const star = document.createElement('div');
+            star.className = 'star';
+            star.style.width = Math.random() * 3 + 'px';
+            star.style.height = star.style.width;
+            star.style.left = Math.random() * 100 + '%';
+            star.style.top = Math.random() * 100 + '%';
+            star.style.animationDelay = Math.random() * 3 + 's';
+            spaceBackground.appendChild(star);
+        }
+
+        // Create shooting stars
+        setInterval(() => {
+            const shootingStar = document.createElement('div');
+            shootingStar.className = 'shooting-star';
+            shootingStar.style.left = Math.random() * 100 + '%';
+            shootingStar.style.top = Math.random() * 50 + '%';
+            spaceBackground.appendChild(shootingStar);
+            
+            setTimeout(() => {
+                shootingStar.remove();
+            }, 3000);
+        }, 5000);
+
+        const chatMessages = document.getElementById('chatMessages');
+        const userInput = document.getElementById('userInput');
+        const sendBtn = document.getElementById('sendBtn');
+
+        let conversationState = {
+            stage: 'welcome',
+            name: '',
+            phone: '',
+            area: '',
+            service: '',
+            jobType: '',
+            internshipType: ''
+        };
+
+        function addMessage(text, isBot = true, showOptions = false, options = []) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${isBot ? 'bot-message' : 'user-message'}`;
+            
+            const contentDiv = document.createElement('div');
+            contentDiv.className = 'message-content';
+            contentDiv.textContent = text;
+            
+            messageDiv.appendChild(contentDiv);
+            chatMessages.appendChild(messageDiv);
+
+            if (showOptions && options.length > 0) {
+                const optionsContainer = document.createElement('div');
+                optionsContainer.className = 'options-container';
+                
+                options.forEach(option => {
+                    const btn = document.createElement('button');
+                    btn.className = 'option-btn';
+                    btn.textContent = option;
+                    btn.onclick = () => handleOptionClick(option);
+                    optionsContainer.appendChild(btn);
+                });
+                
+                messageDiv.appendChild(optionsContainer);
+            }
+
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        function showTypingIndicator() {
+            const typingDiv = document.createElement('div');
+            typingDiv.className = 'message bot-message';
+            typingDiv.id = 'typingIndicator';
+            
+            const indicator = document.createElement('div');
+            indicator.className = 'typing-indicator';
+            indicator.innerHTML = '<div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div>';
+            
+            typingDiv.appendChild(indicator);
+            chatMessages.appendChild(typingDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        function removeTypingIndicator() {
+            const indicator = document.getElementById('typingIndicator');
+            if (indicator) {
+                indicator.remove();
+            }
+        }
+
+        function botReply(text, showOptions = false, options = [], delay = 1000) {
+            showTypingIndicator();
+            setTimeout(() => {
+                removeTypingIndicator();
+                addMessage(text, true, showOptions, options);
+                
+                if (conversationState.stage === 'name' || 
+                    conversationState.stage === 'phone' || 
+                    conversationState.stage === 'area' || 
+                    conversationState.stage === 'interest') {
+                    enableInput();
+                }
+            }, delay);
+        }
+
+        function enableInput() {
+            userInput.disabled = false;
+            sendBtn.disabled = false;
+            userInput.focus();
+        }
+
+        function disableInput() {
+            userInput.disabled = true;
+            sendBtn.disabled = true;
+        }
+
+        function handleOptionClick(option) {
+            addMessage(option, false);
+            disableInput();
+            processResponse(option);
+        }
+
+        function processResponse(response) {
+            const lowerResponse = response.toLowerCase().trim();
+
+            switch (conversationState.stage) {
+                case 'welcome':
+                    conversationState.stage = 'name';
+                    botReply("Great! May I know your name?");
+                    break;
+
+                case 'name':
+                    conversationState.name = response;
+                    conversationState.stage = 'phone';
+                    botReply(`Nice to meet you, ${conversationState.name}! Kindly share your phone number.`);
+                    break;
+
+                case 'phone':
+                    conversationState.phone = response;
+                    conversationState.stage = 'area';
+                    botReply(`Thank you! Which area are you from?`);
+                    break;
+
+                case 'area':
+                    conversationState.area = response;
+                    conversationState.stage = 'service';
+                    botReply(
+                        `Thank you! Now, what would you like help with today?`,
+                        true,
+                        ['Job', 'Internship', 'Upskilling', 'Counselling']
+                    );
+                    break;
+
+                case 'service':
+                    conversationState.service = lowerResponse;
+                    
+                    if (lowerResponse === 'job') {
+                        conversationState.stage = 'job_location';
+                        botReply(
+                            'What type of work arrangement are you looking for?',
+                            true,
+                            ['Remote', 'Hybrid', 'Onsite']
+                        );
+                    } else if (lowerResponse === 'internship') {
+                        conversationState.stage = 'internship_location';
+                        botReply(
+                            'What type of internship arrangement are you looking for?',
+                            true,
+                            ['Remote', 'Hybrid', 'Onsite']
+                        );
+                    } else if (lowerResponse === 'upskilling') {
+                        conversationState.stage = 'interest';
+                        botReply('That\'s great! What is your area of interest and domain?');
+                    } else if (lowerResponse === 'counselling') {
+                        botReply('Thank you for reaching out! We will connect you with a team member soon. They will assist you with your counselling needs.');
+                        conversationState.stage = 'complete';
+                    }
+                    break;
+
+                case 'job_location':
+                    conversationState.jobType = lowerResponse;
+                    conversationState.stage = 'job_time';
+                    botReply(
+                        'Are you looking for part-time or full-time work?',
+                        true,
+                        ['Part-time', 'Full-time']
+                    );
+                    break;
+
+                case 'job_time':
+                    botReply(`Perfect! I've noted that you're looking for a ${response} ${conversationState.jobType} job. We will connect you with our team member soon to discuss suitable opportunities.`);
+                    conversationState.stage = 'complete';
+                    break;
+
+                case 'internship_location':
+                    conversationState.internshipType = lowerResponse;
+                    conversationState.stage = 'internship_time';
+                    botReply(
+                        'Are you looking for a part-time or full-time internship?',
+                        true,
+                        ['Part-time', 'Full-time']
+                    );
+                    break;
+
+                case 'internship_time':
+                    botReply(`Excellent! I've noted that you're looking for a ${response} ${conversationState.internshipType} internship. We will connect you with our team member soon to help you find the right opportunity.`);
+                    conversationState.stage = 'complete';
+                    break;
+
+                case 'interest':
+                    botReply(`Great choice! I've noted your interest in ${response}. We will connect you with our team member soon who can guide you with upskilling resources in this domain.`);
+                    conversationState.stage = 'complete';
+                    break;
+            }
+        }
+
+        function handleSendMessage() {
+            const message = userInput.value.trim();
+            if (message === '') return;
+
+            addMessage(message, false);
+            userInput.value = '';
+            disableInput();
+            processResponse(message);
+        }
+
+        sendBtn.addEventListener('click', handleSendMessage);
+        userInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                handleSendMessage();
+            }
+        });
+
+        // Start the conversation
+        setTimeout(() => {
+            botReply('Hi! Welcome to the Career Bot 👋', false, [], 500);
+            setTimeout(() => {
+                botReply('I\'m here to help you with jobs, internships, upskilling, and counselling.', true, ['Get Started'], 1500);
+            }, 1500);
+        }, 500);
+    </script>
+</body>
+</html>
